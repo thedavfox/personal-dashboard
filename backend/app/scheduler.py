@@ -23,18 +23,17 @@ async def _run_widget(widget_id) -> None:
         if plugin is None:
             return
 
+        previous_result = await db.scalar(select(WidgetResult).where(WidgetResult.widget_id == widget.id))
         try:
-            data = await plugin.fetch(widget)
+            data = await plugin.fetch(widget, previous_result.data if previous_result else None)
         except Exception as e:
             logger.exception("widget %s (%s) fetch failed", widget.id, widget.type)
             data = {"error": f"Unexpected error: {e}"}
 
-        result = await db.scalar(select(WidgetResult).where(WidgetResult.widget_id == widget.id))
-        if result is None:
-            result = WidgetResult(widget_id=widget.id, data=data)
-            db.add(result)
+        if previous_result is None:
+            db.add(WidgetResult(widget_id=widget.id, data=data))
         else:
-            result.data = data
+            previous_result.data = data
         await db.commit()
 
         dashboard = await db.get(Dashboard, widget.dashboard_id)

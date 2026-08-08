@@ -20,7 +20,7 @@ class TodoSyncWidget(WidgetPlugin):
     type_key = "todo_sync"
     update_interval_seconds = 10
 
-    async def fetch(self, widget: Widget) -> dict:
+    async def fetch(self, widget: Widget, previous: dict | None) -> dict:
         if _todo_engine is None:
             return {"error": "TODO_DB_URL is not configured", "tasks": []}
 

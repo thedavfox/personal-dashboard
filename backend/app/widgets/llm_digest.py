@@ -60,7 +60,7 @@ class LLMDigestWidget(WidgetPlugin):
     type_key = "llm_digest"
     update_interval_seconds = 6 * 60 * 60  # 4x/day; also re-runs immediately whenever the widget is edited
 
-    async def fetch(self, widget: Widget) -> dict:
+    async def fetch(self, widget: Widget, previous: dict | None) -> dict:
         if not settings.tavily_api_key:
             return {"error": "TAVILY_API_KEY is not configured", "articles": []}
         if not settings.groq_api_key:

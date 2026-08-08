@@ -17,7 +17,9 @@ class WidgetPlugin(ABC):
     update_interval_seconds: int
 
     @abstractmethod
-    async def fetch(self, widget: Widget) -> dict:
+    async def fetch(self, widget: Widget, previous: dict | None) -> dict:
         """Produce the latest data for this widget instance. `widget.config`
-        holds type-specific settings; `widget.prompt` is set for LLM widgets."""
+        holds type-specific settings; `widget.prompt` is set for LLM widgets.
+        `previous` is this widget's last cached result (or None), for plugins
+        that build up a rolling history rather than just the latest value."""
         raise NotImplementedError
