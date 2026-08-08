@@ -1,7 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { API_BASE, getToken } from "../api/client";
 
-type WidgetUpdateEvent = { type: "widget_update"; widget_id: string; data: unknown };
+type WidgetUpdateEvent = { type: "widget_update"; widget_id: string; data: unknown; generated_at: string };
+
+export interface WidgetResultEntry {
+  data: unknown;
+  generatedAt: string;
+}
 
 /**
  * One WebSocket connection shared by every widget on the dashboard. Backend
@@ -9,8 +14,8 @@ type WidgetUpdateEvent = { type: "widget_update"; widget_id: string; data: unkno
  * (see app/scheduler.py); we key incoming results by widget_id and let each
  * widget component read only its own slice.
  */
-export function useWidgetSocket(initialResults: Record<string, unknown> = {}) {
-  const [results, setResults] = useState<Record<string, unknown>>(initialResults);
+export function useWidgetSocket(initialResults: Record<string, WidgetResultEntry> = {}) {
+  const [results, setResults] = useState<Record<string, WidgetResultEntry>>(initialResults);
   const wsRef = useRef<WebSocket | null>(null);
 
   useEffect(() => {
@@ -24,7 +29,10 @@ export function useWidgetSocket(initialResults: Record<string, unknown> = {}) {
     ws.onmessage = (event) => {
       const payload: WidgetUpdateEvent = JSON.parse(event.data);
       if (payload.type === "widget_update") {
-        setResults((prev) => ({ ...prev, [payload.widget_id]: payload.data }));
+        setResults((prev) => ({
+          ...prev,
+          [payload.widget_id]: { data: payload.data, generatedAt: payload.generated_at },
+        }));
       }
     };
 

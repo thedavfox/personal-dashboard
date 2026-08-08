@@ -45,7 +45,7 @@ function App() {
 
       {dashboard && (
         <>
-          <AddWidgetForm dashboardId={dashboard.id} onAdded={loadDashboard} />
+          <AddWidgetForm dashboard={dashboard} onAdded={loadDashboard} />
           <DashboardGrid dashboard={dashboard} onChange={loadDashboard} />
         </>
       )}

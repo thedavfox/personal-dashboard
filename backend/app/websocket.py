@@ -1,4 +1,5 @@
 import uuid
+from datetime import datetime, timezone
 
 from fastapi import WebSocket
 
@@ -23,7 +24,12 @@ class ConnectionManager:
 
     async def send_widget_update(self, user_id: uuid.UUID, widget_id: uuid.UUID, data: dict) -> None:
         connections = self._connections.get(user_id, ())
-        payload = {"type": "widget_update", "widget_id": str(widget_id), "data": data}
+        payload = {
+            "type": "widget_update",
+            "widget_id": str(widget_id),
+            "data": data,
+            "generated_at": datetime.now(timezone.utc).isoformat(),
+        }
         for ws in list(connections):
             try:
                 await ws.send_json(payload)

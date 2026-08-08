@@ -1,7 +1,9 @@
 import uuid
 
 from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 
 from app.auth import get_current_user
 from app.database import get_db
@@ -12,6 +14,12 @@ from app.schemas import WidgetCreate, WidgetOut, WidgetUpdate
 from app.widgets.registry import get_plugin
 
 router = APIRouter(prefix="/dashboards/{dashboard_id}/widgets", tags=["widgets"])
+
+
+async def _get_widget_with_result(widget_id: uuid.UUID, db: AsyncSession) -> Widget:
+    return await db.scalar(
+        select(Widget).where(Widget.id == widget_id).options(selectinload(Widget.latest_result))
+    )
 
 
 @router.post("", response_model=WidgetOut, status_code=status.HTTP_201_CREATED)
@@ -28,9 +36,8 @@ async def create_widget(
     widget = Widget(dashboard_id=dashboard_id, **payload.model_dump())
     db.add(widget)
     await db.commit()
-    await db.refresh(widget)
     await refresh_jobs()
-    return widget
+    return await _get_widget_with_result(widget.id, db)
 
 
 @router.patch("/{widget_id}", response_model=WidgetOut)
@@ -49,8 +56,7 @@ async def update_widget(
     for field, value in payload.model_dump(exclude_unset=True).items():
         setattr(widget, field, value)
     await db.commit()
-    await db.refresh(widget)
-    return widget
+    return await _get_widget_with_result(widget.id, db)
 
 
 @router.delete("/{widget_id}", status_code=status.HTTP_204_NO_CONTENT)
