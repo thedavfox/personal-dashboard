@@ -10,6 +10,7 @@ class Settings(BaseSettings):
     access_token_expire_minutes: int = 10080
 
     groq_api_key: str | None = None
+    tavily_api_key: str | None = None
 
     stock_api_key: str | None = None
     stock_api_base_url: str = "https://finnhub.io/api/v1"
