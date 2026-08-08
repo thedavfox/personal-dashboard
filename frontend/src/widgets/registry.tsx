@@ -1,0 +1,21 @@
+import type { ComponentType } from "react";
+import { TodoSyncWidget } from "./TodoSyncWidget";
+import { StocksWidget } from "./StocksWidget";
+import { LLMDigestWidget } from "./LLMDigestWidget";
+
+/**
+ * Maps a widget's `type` (set on the backend Widget model) to the component
+ * that renders its data. Add a new entry here alongside a new backend
+ * plugin in app/widgets/ to introduce a new widget type end-to-end.
+ */
+export const WIDGET_COMPONENTS: Record<string, ComponentType<any>> = {
+  todo_sync: TodoSyncWidget,
+  stocks: StocksWidget,
+  llm_digest: LLMDigestWidget,
+};
+
+export const WIDGET_LABELS: Record<string, string> = {
+  todo_sync: "Todo List",
+  stocks: "Stocks",
+  llm_digest: "LLM Digest",
+};
