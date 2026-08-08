@@ -9,7 +9,7 @@ from app.auth import get_current_user
 from app.database import get_db
 from app.models import User, Widget
 from app.routers.dashboards import _get_owned_dashboard
-from app.scheduler import refresh_jobs
+from app.scheduler import refresh_jobs, trigger_now
 from app.schemas import WidgetCreate, WidgetOut, WidgetUpdate
 from app.widgets.registry import get_plugin
 
@@ -53,9 +53,15 @@ async def update_widget(
     if widget is None or widget.dashboard_id != dashboard_id:
         raise HTTPException(status.HTTP_404_NOT_FOUND, "Widget not found")
 
-    for field, value in payload.model_dump(exclude_unset=True).items():
+    changed_fields = payload.model_dump(exclude_unset=True)
+    for field, value in changed_fields.items():
         setattr(widget, field, value)
     await db.commit()
+
+    # Layout-only changes (dragging/resizing) shouldn't force a re-fetch.
+    if changed_fields.keys() - {"layout"}:
+        trigger_now(widget.id)
+
     return await _get_widget_with_result(widget.id, db)
 
 

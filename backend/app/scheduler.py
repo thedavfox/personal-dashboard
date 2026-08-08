@@ -76,3 +76,13 @@ def start() -> None:
 
 async def refresh_jobs() -> None:
     await _schedule_all_widgets()
+
+
+def trigger_now(widget_id) -> None:
+    """Reschedules a widget's existing job to fire immediately, without
+    disturbing its normal recurring interval. Used when a widget's config or
+    prompt changes, so edits show up right away instead of on the next
+    scheduled tick."""
+    job = scheduler.get_job(f"widget:{widget_id}")
+    if job:
+        scheduler.modify_job(job.id, next_run_time=datetime.now())
