@@ -1,4 +1,5 @@
 from google import genai
+from google.genai import errors as genai_errors
 
 from app.config import settings
 from app.models import Widget
@@ -27,5 +28,8 @@ class LLMDigestWidget(WidgetPlugin):
             return {"error": "GEMINI_API_KEY is not configured", "result": None}
 
         prompt = widget.prompt or DEFAULT_PROMPT
-        response = await _client.aio.models.generate_content(model="gemini-2.0-flash", contents=prompt)
+        try:
+            response = await _client.aio.models.generate_content(model="gemini-2.0-flash", contents=prompt)
+        except genai_errors.APIError as e:
+            return {"error": f"Gemini API error ({e.code}): {e.message}", "result": None}
         return {"result": response.text}

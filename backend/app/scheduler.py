@@ -25,9 +25,9 @@ async def _run_widget(widget_id) -> None:
 
         try:
             data = await plugin.fetch(widget)
-        except Exception:
+        except Exception as e:
             logger.exception("widget %s (%s) fetch failed", widget.id, widget.type)
-            return
+            data = {"error": f"Unexpected error: {e}"}
 
         result = await db.scalar(select(WidgetResult).where(WidgetResult.widget_id == widget.id))
         if result is None:
