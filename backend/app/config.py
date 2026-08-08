@@ -9,7 +9,7 @@ class Settings(BaseSettings):
     jwt_algorithm: str = "HS256"
     access_token_expire_minutes: int = 10080
 
-    gemini_api_key: str | None = None
+    groq_api_key: str | None = None
 
     stock_api_key: str | None = None
     stock_api_base_url: str = "https://finnhub.io/api/v1"
