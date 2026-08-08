@@ -1,10 +1,10 @@
-from anthropic import AsyncAnthropic
+from google import genai
 
 from app.config import settings
 from app.models import Widget
 from app.widgets.base import WidgetPlugin
 
-_client = AsyncAnthropic(api_key=settings.anthropic_api_key) if settings.anthropic_api_key else None
+_client = genai.Client(api_key=settings.gemini_api_key) if settings.gemini_api_key else None
 
 DEFAULT_PROMPT = (
     "List the 5 most relevant articles published today. For each, give the "
@@ -14,9 +14,9 @@ DEFAULT_PROMPT = (
 
 
 class LLMDigestWidget(WidgetPlugin):
-    """Runs `widget.prompt` (falling back to DEFAULT_PROMPT) through Claude
-    on a slow schedule and caches the result. The prompt is stored on the
-    widget itself so it's editable from the UI without a redeploy.
+    """Runs `widget.prompt` (falling back to DEFAULT_PROMPT) through Gemini's
+    free tier on a slow schedule and caches the result. The prompt is stored
+    on the widget itself so it's editable from the UI without a redeploy.
     """
 
     type_key = "llm_digest"
@@ -24,13 +24,8 @@ class LLMDigestWidget(WidgetPlugin):
 
     async def fetch(self, widget: Widget) -> dict:
         if _client is None:
-            return {"error": "ANTHROPIC_API_KEY is not configured", "result": None}
+            return {"error": "GEMINI_API_KEY is not configured", "result": None}
 
         prompt = widget.prompt or DEFAULT_PROMPT
-        message = await _client.messages.create(
-            model="claude-sonnet-5",
-            max_tokens=1024,
-            messages=[{"role": "user", "content": prompt}],
-        )
-        text = "".join(block.text for block in message.content if block.type == "text")
-        return {"result": text}
+        response = await _client.aio.models.generate_content(model="gemini-2.0-flash", contents=prompt)
+        return {"result": response.text}
