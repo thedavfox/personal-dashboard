@@ -29,6 +29,7 @@ export interface Widget {
   config: Record<string, unknown>;
   prompt: string | null;
   layout: { x: number; y: number; w: number; h: number };
+  latest_result: { data: unknown; generated_at: string } | null;
 }
 
 export interface Dashboard {

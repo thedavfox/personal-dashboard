@@ -23,14 +23,22 @@ export function LoginForm({ onLoggedIn }: { onLoggedIn: () => void }) {
   }
 
   return (
-    <form className="login-form" onSubmit={handleSubmit}>
+    <form className="login-form" onSubmit={handleSubmit} autoComplete="off">
       <h1>Personal Dashboard</h1>
-      <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+      <input
+        type="email"
+        placeholder="Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        autoComplete="off"
+        required
+      />
       <input
         type="password"
         placeholder="Password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
+        autoComplete="new-password"
         required
       />
       <button type="submit">{mode === "login" ? "Log in" : "Register"}</button>

@@ -9,8 +9,8 @@ type WidgetUpdateEvent = { type: "widget_update"; widget_id: string; data: unkno
  * (see app/scheduler.py); we key incoming results by widget_id and let each
  * widget component read only its own slice.
  */
-export function useWidgetSocket() {
-  const [results, setResults] = useState<Record<string, unknown>>({});
+export function useWidgetSocket(initialResults: Record<string, unknown> = {}) {
+  const [results, setResults] = useState<Record<string, unknown>>(initialResults);
   const wsRef = useRef<WebSocket | null>(null);
 
   useEffect(() => {

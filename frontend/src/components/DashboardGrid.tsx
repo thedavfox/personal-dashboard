@@ -10,8 +10,16 @@ interface Props {
   onChange: () => void;
 }
 
+function initialResultsFor(dashboard: Dashboard): Record<string, unknown> {
+  const initial: Record<string, unknown> = {};
+  for (const widget of dashboard.widgets) {
+    if (widget.latest_result) initial[widget.id] = widget.latest_result.data;
+  }
+  return initial;
+}
+
 export function DashboardGrid({ dashboard, onChange }: Props) {
-  const liveResults = useWidgetSocket();
+  const liveResults = useWidgetSocket(initialResultsFor(dashboard));
 
   const layout = dashboard.widgets.map((w) => ({ i: w.id, ...w.layout }));
 

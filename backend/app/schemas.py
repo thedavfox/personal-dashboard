@@ -39,6 +39,7 @@ class WidgetOut(BaseModel):
     config: dict
     prompt: str | None
     layout: dict
+    latest_result: "WidgetResultOut | None" = None
     model_config = {"from_attributes": True}
 
 
@@ -54,6 +55,9 @@ class DashboardOut(BaseModel):
 
 
 class WidgetResultOut(BaseModel):
-    widget_id: uuid.UUID
     data: dict
     generated_at: datetime
+    model_config = {"from_attributes": True}
+
+
+WidgetOut.model_rebuild()

@@ -9,8 +9,8 @@ _todo_engine = create_async_engine(settings.todo_db_url) if settings.todo_db_url
 
 
 class TodoSyncWidget(WidgetPlugin):
-    """Polls the separate TODO_List app's database for the current task
-    list. Config: {"list_id": <optional, filter to one list>}.
+    """Polls the separate TODO_List app's `tasks` table (columns: id,
+    taskName, dueDate, status — see ../../../TODO_List/database/functions.py).
 
     Polling (rather than a webhook from the TODO app) is the simplest way to
     stay decoupled from that app's internals; the interval controls how
@@ -24,16 +24,10 @@ class TodoSyncWidget(WidgetPlugin):
         if _todo_engine is None:
             return {"error": "TODO_DB_URL is not configured", "tasks": []}
 
-        query = "SELECT id, title, completed, due_date FROM tasks"
-        params = {}
-        list_id = widget.config.get("list_id")
-        if list_id:
-            query += " WHERE list_id = :list_id"
-            params["list_id"] = list_id
-        query += " ORDER BY due_date IS NULL, due_date ASC LIMIT 50"
+        query = "SELECT id, taskName, dueDate, status FROM tasks ORDER BY dueDate IS NULL, dueDate ASC LIMIT 50"
 
         async with _todo_engine.connect() as conn:
-            result = await conn.execute(text(query), params)
+            result = await conn.execute(text(query))
             tasks = [dict(row._mapping) for row in result]
 
         return {"tasks": tasks}

@@ -1,8 +1,8 @@
 interface Task {
   id: number;
-  title: string;
-  completed: boolean;
-  due_date: string | null;
+  taskName: string;
+  status: string;
+  dueDate: string | null;
 }
 
 export function TodoSyncWidget({ data }: { data: { tasks?: Task[]; error?: string } | undefined }) {
@@ -11,13 +11,16 @@ export function TodoSyncWidget({ data }: { data: { tasks?: Task[]; error?: strin
 
   return (
     <ul className="todo-list">
-      {(data.tasks ?? []).map((task) => (
-        <li key={task.id} className={task.completed ? "done" : ""}>
-          <input type="checkbox" checked={task.completed} readOnly />
-          <span>{task.title}</span>
-          {task.due_date && <span className="due-date">{task.due_date}</span>}
-        </li>
-      ))}
+      {(data.tasks ?? []).map((task) => {
+        const done = task.status === "complete";
+        return (
+          <li key={task.id} className={done ? "done" : ""}>
+            <input type="checkbox" checked={done} readOnly />
+            <span>{task.taskName}</span>
+            {task.dueDate && <span className="due-date">{task.dueDate}</span>}
+          </li>
+        );
+      })}
     </ul>
   );
 }
