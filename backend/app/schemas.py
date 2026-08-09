@@ -22,12 +22,14 @@ class Token(BaseModel):
 
 class WidgetCreate(BaseModel):
     type: str
+    title: str | None = None
     config: dict = {}
     prompt: str | None = None
     layout: dict = {"x": 0, "y": 0, "w": 4, "h": 4}
 
 
 class WidgetUpdate(BaseModel):
+    title: str | None = None
     config: dict | None = None
     prompt: str | None = None
     layout: dict | None = None
@@ -36,6 +38,7 @@ class WidgetUpdate(BaseModel):
 class WidgetOut(BaseModel):
     id: uuid.UUID
     type: str
+    title: str | None
     config: dict
     prompt: str | None
     layout: dict

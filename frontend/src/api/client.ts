@@ -26,6 +26,7 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
 export interface Widget {
   id: string;
   type: string;
+  title: string | null;
   config: Record<string, unknown>;
   prompt: string | null;
   layout: { x: number; y: number; w: number; h: number };

@@ -3,6 +3,7 @@ import GridLayout, { type Layout } from "react-grid-layout";
 import type { Dashboard, Widget } from "../api/client";
 import { api } from "../api/client";
 import { useWidgetSocket, type WidgetResultEntry } from "../hooks/useWidgetSocket";
+import { EditableTitle } from "./EditableTitle";
 import { relativeTime } from "../lib/relativeTime";
 import { WIDGET_COMPONENTS, WIDGET_LABELS } from "../widgets/registry";
 import "react-grid-layout/css/styles.css";
@@ -55,6 +56,11 @@ export function DashboardGrid({ dashboard, onChange }: Props) {
     onChange();
   }
 
+  async function handleSaveTitle(widget: Widget, title: string | null) {
+    await api.updateWidget(dashboard.id, widget.id, { title });
+    onChange();
+  }
+
   if (dashboard.widgets.length === 0) {
     return <p className="dashboard-empty">No widgets yet — add one above to get started.</p>;
   }
@@ -67,7 +73,7 @@ export function DashboardGrid({ dashboard, onChange }: Props) {
       rowHeight={60}
       width={1200}
       draggableHandle=".widget-header"
-      draggableCancel=".widget-remove,.widget-delete-confirm"
+      draggableCancel=".widget-remove,.widget-delete-confirm,.widget-title,.widget-title-input"
       onLayoutChange={handleLayoutChange}
     >
       {dashboard.widgets.map((widget) => {
@@ -78,7 +84,10 @@ export function DashboardGrid({ dashboard, onChange }: Props) {
         return (
           <div key={widget.id} className="widget-card">
             <div className="widget-header">
-              <span>{WIDGET_LABELS[widget.type] ?? widget.type}</span>
+              <EditableTitle
+                value={widget.title ?? WIDGET_LABELS[widget.type] ?? widget.type}
+                onSave={(title) => handleSaveTitle(widget, title)}
+              />
               {confirming ? (
                 <span className="widget-delete-confirm">
                   <button className="confirm-yes" onClick={() => handleDeleteWidget(widget.id)}>

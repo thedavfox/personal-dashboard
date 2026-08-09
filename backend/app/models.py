@@ -49,6 +49,7 @@ class Widget(Base):
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=_uuid)
     dashboard_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("dashboards.id", ondelete="CASCADE"))
     type: Mapped[str] = mapped_column(String(64))
+    title: Mapped[str | None] = mapped_column(String(255), nullable=True)
     config: Mapped[dict] = mapped_column(JSON, default=dict)
     prompt: Mapped[str | None] = mapped_column(Text, nullable=True)
     layout: Mapped[dict] = mapped_column(JSON, default=lambda: {"x": 0, "y": 0, "w": 4, "h": 4})

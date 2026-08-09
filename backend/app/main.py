@@ -2,6 +2,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy import text
 
 from app.auth import decode_access_token
 from app.database import Base, engine
@@ -14,6 +15,9 @@ from app.websocket import manager
 async def lifespan(app: FastAPI):
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
+        # No migration tool wired up yet — additive, idempotent column adds
+        # for fields introduced after the table already existed in dev/prod.
+        await conn.execute(text("ALTER TABLE widgets ADD COLUMN IF NOT EXISTS title VARCHAR(255)"))
 
     scheduler.start()
     await refresh_jobs()

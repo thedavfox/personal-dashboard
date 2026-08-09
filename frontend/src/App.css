@@ -170,6 +170,32 @@ body {
   cursor: move;
 }
 
+.widget-title {
+  cursor: text;
+  border-radius: 4px;
+  padding: 0.1rem 0.3rem;
+  margin: -0.1rem -0.3rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.widget-title:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.widget-title-input {
+  font: inherit;
+  font-weight: 600;
+  background: #14161b;
+  color: inherit;
+  border: 1px solid #7aa2f7;
+  border-radius: 4px;
+  padding: 0.1rem 0.3rem;
+  margin: -0.1rem -0.3rem;
+  width: 60%;
+}
+
 .widget-remove {
   background: none;
   border: none;
