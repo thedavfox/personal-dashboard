@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Sparkline } from "../components/Sparkline";
 import { EpsBarChart } from "../components/EpsBarChart";
 import { EarningsBeatChart } from "../components/EarningsBeatChart";
@@ -55,8 +56,19 @@ function formatMarketCap(millions: number | undefined): string | null {
 }
 
 export function StocksWidget({ data }: { data: { quotes?: Record<string, Quote>; error?: string } | undefined }) {
+  const [expanded, setExpanded] = useState<Set<string>>(new Set());
+
   if (!data) return <p className="widget-empty">Loading quotes…</p>;
   if (data.error) return <p className="widget-error">{data.error}</p>;
+
+  function toggle(ticker: string) {
+    setExpanded((prev) => {
+      const next = new Set(prev);
+      if (next.has(ticker)) next.delete(ticker);
+      else next.add(ticker);
+      return next;
+    });
+  }
 
   return (
     <div className="stocks-list">
@@ -65,16 +77,16 @@ export function StocksWidget({ data }: { data: { quotes?: Record<string, Quote>;
         const color = up ? UP_COLOR : DOWN_COLOR;
         const marketCap = formatMarketCap(quote.profile?.marketCapitalization);
         const rec = quote.recommendation;
-        const totalVotes = rec ? (rec.strongBuy ?? 0) + (rec.buy ?? 0) + (rec.hold ?? 0) + (rec.sell ?? 0) + (rec.strongSell ?? 0) : 0;
+        const totalVotes = rec
+          ? (rec.strongBuy ?? 0) + (rec.buy ?? 0) + (rec.hold ?? 0) + (rec.sell ?? 0) + (rec.strongSell ?? 0)
+          : 0;
+        const isExpanded = expanded.has(ticker);
 
         return (
           <div key={ticker} className="stock-item">
             <div className="stock-header">
               {quote.profile?.logo && <img className="stock-logo" src={quote.profile.logo} alt="" />}
-              <div className="stock-name-block">
-                <span className="stock-ticker">{ticker}</span>
-                {quote.profile?.name && <span className="stock-name">{quote.profile.name}</span>}
-              </div>
+              <span className="stock-ticker">{ticker}</span>
               <div className="stock-price-block">
                 <span className="stock-price">{quote.c?.toFixed(2)}</span>
                 <span className={`stock-change ${up ? "up" : "down"}`}>
@@ -87,40 +99,50 @@ export function StocksWidget({ data }: { data: { quotes?: Record<string, Quote>;
             <Sparkline history={quote.history ?? []} color={color} />
 
             <div className="stock-meta">
-              {quote.l != null && quote.h != null && (
-                <span>
-                  Day: {quote.l.toFixed(2)}–{quote.h.toFixed(2)}
-                </span>
-              )}
-              {quote.pc != null && <span>Prev close: {quote.pc.toFixed(2)}</span>}
-              {quote.stats?.week52Low != null && quote.stats?.week52High != null && (
-                <span>
-                  52w: {quote.stats.week52Low.toFixed(2)}–{quote.stats.week52High.toFixed(2)}
-                </span>
-              )}
-              {quote.stats?.peTTM != null && <span>P/E: {quote.stats.peTTM.toFixed(1)}</span>}
-              {quote.stats?.beta != null && <span>Beta: {quote.stats.beta.toFixed(2)}</span>}
-              {marketCap && <span>Mkt cap: {marketCap}</span>}
+              {marketCap && <span>{marketCap}</span>}
+              {quote.stats?.peTTM != null && <span>P/E {quote.stats.peTTM.toFixed(1)}</span>}
+              <button className="stock-details-toggle" onClick={() => toggle(ticker)}>
+                {isExpanded ? "Less ▲" : "Details ▾"}
+              </button>
             </div>
 
-            {rec && totalVotes > 0 && (
-              <div className="stock-recommendation">
-                Analysts ({rec.period}): {rec.strongBuy} strong buy, {rec.buy} buy, {rec.hold} hold, {rec.sell} sell
-                {rec.strongSell ? `, ${rec.strongSell} strong sell` : ""}
-              </div>
-            )}
+            {isExpanded && (
+              <div className="stock-details">
+                <div className="stock-meta">
+                  {quote.l != null && quote.h != null && (
+                    <span>
+                      Day: {quote.l.toFixed(2)}–{quote.h.toFixed(2)}
+                    </span>
+                  )}
+                  {quote.pc != null && <span>Prev close: {quote.pc.toFixed(2)}</span>}
+                  {quote.stats?.week52Low != null && quote.stats?.week52High != null && (
+                    <span>
+                      52w: {quote.stats.week52Low.toFixed(2)}–{quote.stats.week52High.toFixed(2)}
+                    </span>
+                  )}
+                  {quote.stats?.beta != null && <span>Beta: {quote.stats.beta.toFixed(2)}</span>}
+                </div>
 
-            {quote.stats?.epsHistory && quote.stats.epsHistory.length > 1 && (
-              <div className="stock-chart-block">
-                <span className="stock-chart-title">Quarterly EPS</span>
-                <EpsBarChart history={quote.stats.epsHistory} />
-              </div>
-            )}
+                {rec && totalVotes > 0 && (
+                  <div className="stock-recommendation">
+                    Analysts ({rec.period}): {rec.strongBuy} strong buy, {rec.buy} buy, {rec.hold} hold,{" "}
+                    {rec.sell} sell{rec.strongSell ? `, ${rec.strongSell} strong sell` : ""}
+                  </div>
+                )}
 
-            {quote.earnings?.quarters && quote.earnings.quarters.length > 0 && (
-              <div className="stock-chart-block">
-                <span className="stock-chart-title">Earnings: actual vs. estimate</span>
-                <EarningsBeatChart quarters={quote.earnings.quarters} />
+                {quote.stats?.epsHistory && quote.stats.epsHistory.length > 1 && (
+                  <div className="stock-chart-block">
+                    <span className="stock-chart-title">Quarterly EPS</span>
+                    <EpsBarChart history={quote.stats.epsHistory} />
+                  </div>
+                )}
+
+                {quote.earnings?.quarters && quote.earnings.quarters.length > 0 && (
+                  <div className="stock-chart-block">
+                    <span className="stock-chart-title">Earnings: actual vs. estimate</span>
+                    <EarningsBeatChart quarters={quote.earnings.quarters} />
+                  </div>
+                )}
               </div>
             )}
           </div>

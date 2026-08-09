@@ -289,33 +289,17 @@ body {
   padding: 2px;
 }
 
-.stock-name-block {
-  display: flex;
-  flex-direction: column;
-  line-height: 1.25;
-  min-width: 0;
-}
-
 .stock-ticker {
   font-weight: 600;
   color: #e6e6e6;
   font-size: 0.85rem;
 }
 
-.stock-name {
-  color: #888;
-  font-size: 0.7rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
 .stock-price-block {
   margin-left: auto;
-  text-align: right;
   display: flex;
-  flex-direction: column;
-  line-height: 1.25;
+  align-items: baseline;
+  gap: 0.5rem;
 }
 
 .stock-price {
@@ -338,10 +322,34 @@ body {
 
 .stock-meta {
   display: flex;
+  align-items: center;
   flex-wrap: wrap;
   gap: 0.3rem 0.8rem;
   font-size: 0.72rem;
   color: #888;
+}
+
+.stock-details-toggle {
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: #7aa2f7;
+  cursor: pointer;
+  font-size: 0.72rem;
+  padding: 0;
+}
+
+.stock-details-toggle:hover {
+  text-decoration: underline;
+}
+
+.stock-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-top: 0.2rem;
+  padding-top: 0.6rem;
+  border-top: 1px dashed #22262f;
 }
 
 .stock-recommendation {
