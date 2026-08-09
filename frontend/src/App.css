@@ -739,3 +739,155 @@ body {
 .clock-dot.active {
   background: #7aa2f7;
 }
+
+.weather-widget {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  height: 100%;
+}
+
+.weather-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  align-items: flex-start;
+}
+
+.weather-use-location {
+  padding: 0.4rem 0.7rem;
+  border-radius: 6px;
+  border: 1px solid #333;
+  background: #1a1d24;
+  color: #7aa2f7;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.weather-use-location:hover {
+  border-color: #7aa2f7;
+}
+
+.weather-search-form {
+  display: flex;
+  gap: 0.4rem;
+  width: 100%;
+}
+
+.weather-search-form input {
+  flex: 1;
+  padding: 0.35rem 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #333;
+  background: #1a1d24;
+  color: inherit;
+  font-size: 0.8rem;
+}
+
+.weather-search-form button {
+  padding: 0.35rem 0.6rem;
+  border-radius: 6px;
+  border: 1px solid #333;
+  background: #1a1d24;
+  color: #7aa2f7;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.weather-location-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  color: #888;
+}
+
+.weather-location-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.weather-change-location {
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: #7aa2f7;
+  cursor: pointer;
+  font-size: 0.72rem;
+  padding: 0;
+}
+
+.weather-change-location:hover {
+  text-decoration: underline;
+}
+
+.weather-current {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.weather-icon {
+  font-size: 2.5rem;
+  line-height: 1;
+}
+
+.weather-current-main {
+  display: flex;
+  flex-direction: column;
+}
+
+.weather-temp {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #e6e6e6;
+  line-height: 1.1;
+}
+
+.weather-description {
+  font-size: 0.8rem;
+  color: #888;
+}
+
+.weather-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 0.8rem;
+  font-size: 0.72rem;
+  color: #888;
+}
+
+.weather-forecast {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.3rem;
+  margin-top: auto;
+  padding-top: 0.6rem;
+  border-top: 1px solid #22262f;
+}
+
+.weather-forecast-day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  font-size: 0.7rem;
+  flex: 1;
+}
+
+.weather-forecast-label {
+  color: #888;
+}
+
+.weather-forecast-icon {
+  font-size: 1.1rem;
+}
+
+.weather-forecast-temps {
+  color: #e6e6e6;
+}
+
+.weather-forecast-low {
+  color: #666;
+}
