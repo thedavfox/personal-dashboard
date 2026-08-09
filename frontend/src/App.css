@@ -151,6 +151,7 @@ body {
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  height: 100%;
   transition: border-color 0.15s;
 }
 
@@ -253,6 +254,57 @@ body {
   margin-left: auto;
   color: #888;
   font-size: 0.75rem;
+}
+
+.stocks-widget {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.stock-add-form {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.stock-add-form input {
+  flex: 1;
+  padding: 0.35rem 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #333;
+  background: #1a1d24;
+  color: inherit;
+  font-size: 0.75rem;
+}
+
+.stock-add-form button {
+  padding: 0.35rem 0.6rem;
+  border-radius: 6px;
+  border: 1px solid #333;
+  background: #1a1d24;
+  color: #7aa2f7;
+  cursor: pointer;
+  font-size: 0.75rem;
+}
+
+.stock-add-form button:hover {
+  border-color: #7aa2f7;
+}
+
+.stock-remove-ticker {
+  background: none;
+  border: none;
+  color: #666;
+  cursor: pointer;
+  font-size: 0.9rem;
+  line-height: 1;
+  padding: 0.1rem 0.3rem;
+  border-radius: 4px;
+}
+
+.stock-remove-ticker:hover {
+  color: #e06c75;
+  background: rgba(224, 108, 117, 0.1);
 }
 
 .stocks-list {

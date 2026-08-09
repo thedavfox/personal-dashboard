@@ -50,6 +50,11 @@ export function DashboardGrid({ dashboard, onChange }: Props) {
     onChange();
   }
 
+  async function handleSaveConfig(widget: Widget, config: Record<string, unknown>) {
+    await api.updateWidget(dashboard.id, widget.id, { config });
+    onChange();
+  }
+
   if (dashboard.widgets.length === 0) {
     return <p className="dashboard-empty">No widgets yet — add one above to get started.</p>;
   }
@@ -95,6 +100,8 @@ export function DashboardGrid({ dashboard, onChange }: Props) {
                   data={entry?.data}
                   prompt={widget.prompt}
                   onSavePrompt={(prompt: string) => handleSavePrompt(widget, prompt)}
+                  config={widget.config}
+                  onSaveConfig={(config: Record<string, unknown>) => handleSaveConfig(widget, config)}
                 />
               ) : (
                 <p className="widget-error">Unknown widget type: {widget.type}</p>
