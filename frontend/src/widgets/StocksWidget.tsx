@@ -1,4 +1,6 @@
 import { Sparkline } from "../components/Sparkline";
+import { EpsBarChart } from "../components/EpsBarChart";
+import { EarningsBeatChart } from "../components/EarningsBeatChart";
 
 interface Profile {
   name?: string;
@@ -11,6 +13,7 @@ interface Stats {
   week52Low?: number;
   peTTM?: number;
   beta?: number;
+  epsHistory?: { period: string; eps: number }[];
 }
 
 interface Recommendation {
@@ -20,6 +23,10 @@ interface Recommendation {
   sell?: number;
   strongSell?: number;
   period?: string;
+}
+
+interface Earnings {
+  quarters?: { period: string; actual: number | null; estimate: number | null }[];
 }
 
 interface Quote {
@@ -34,6 +41,7 @@ interface Quote {
   profile?: Profile;
   stats?: Stats;
   recommendation?: Recommendation;
+  earnings?: Earnings;
 }
 
 const UP_COLOR = "#4caf50";
@@ -99,6 +107,20 @@ export function StocksWidget({ data }: { data: { quotes?: Record<string, Quote>;
               <div className="stock-recommendation">
                 Analysts ({rec.period}): {rec.strongBuy} strong buy, {rec.buy} buy, {rec.hold} hold, {rec.sell} sell
                 {rec.strongSell ? `, ${rec.strongSell} strong sell` : ""}
+              </div>
+            )}
+
+            {quote.stats?.epsHistory && quote.stats.epsHistory.length > 1 && (
+              <div className="stock-chart-block">
+                <span className="stock-chart-title">Quarterly EPS</span>
+                <EpsBarChart history={quote.stats.epsHistory} />
+              </div>
+            )}
+
+            {quote.earnings?.quarters && quote.earnings.quarters.length > 0 && (
+              <div className="stock-chart-block">
+                <span className="stock-chart-title">Earnings: actual vs. estimate</span>
+                <EarningsBeatChart quarters={quote.earnings.quarters} />
               </div>
             )}
           </div>
