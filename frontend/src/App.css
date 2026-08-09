@@ -265,34 +265,88 @@ body {
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #22262f;
 }
 
-.stock-row {
+.stock-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.stock-header {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: 0.6rem;
-  font-size: 0.85rem;
+}
+
+.stock-logo {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  object-fit: contain;
+  background: #fff;
+  padding: 2px;
+}
+
+.stock-name-block {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+  min-width: 0;
 }
 
 .stock-ticker {
   font-weight: 600;
   color: #e6e6e6;
+  font-size: 0.85rem;
+}
+
+.stock-name {
+  color: #888;
+  font-size: 0.7rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.stock-price-block {
+  margin-left: auto;
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
 }
 
 .stock-price {
   color: #e6e6e6;
+  font-size: 0.9rem;
+  font-weight: 600;
 }
 
 .stock-change {
-  margin-left: auto;
+  font-size: 0.75rem;
 }
 
-.stock-row.up .stock-change {
+.stock-change.up {
   color: #4caf50;
 }
 
-.stock-row.down .stock-change {
+.stock-change.down {
   color: #e06c75;
+}
+
+.stock-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 0.8rem;
+  font-size: 0.72rem;
+  color: #888;
+}
+
+.stock-recommendation {
+  font-size: 0.72rem;
+  color: #888;
 }
 
 .sparkline {
