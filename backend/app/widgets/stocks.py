@@ -6,12 +6,12 @@ from app.config import settings
 from app.models import Widget
 from app.widgets.base import WidgetPlugin
 
-# At the 30s poll interval, this keeps roughly 4 hours of history per ticker.
-MAX_HISTORY_POINTS = 480
+# At the 10-minute poll interval, this keeps roughly 2 days of history per ticker.
+MAX_HISTORY_POINTS = 288
 
 # Profile/metrics/recommendations change slowly, so they're cached on the
 # widget's own result and only refetched once stale — keeps the steady-state
-# 30s poll down to one API call per ticker instead of four.
+# poll down to one API call per ticker instead of four.
 PROFILE_TTL_SECONDS = 7 * 24 * 60 * 60
 METRICS_TTL_SECONDS = 24 * 60 * 60
 RECOMMENDATION_TTL_SECONDS = 24 * 60 * 60
@@ -33,7 +33,7 @@ class StocksWidget(WidgetPlugin):
     """
 
     type_key = "stocks"
-    update_interval_seconds = 30
+    update_interval_seconds = 10 * 60
 
     async def fetch(self, widget: Widget, previous: dict | None) -> dict:
         tickers: list[str] = widget.config.get("tickers", [])
