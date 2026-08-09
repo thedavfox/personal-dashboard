@@ -605,3 +605,103 @@ body {
 .llm-result {
   white-space: pre-wrap;
 }
+
+.clock-widget {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 0.75rem;
+  user-select: none;
+  touch-action: pan-y;
+}
+
+.clock-face-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  cursor: pointer;
+}
+
+.clock-digital {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.clock-digital-time {
+  font-size: 1.9rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: #e6e6e6;
+  letter-spacing: 0.02em;
+}
+
+.clock-digital-date {
+  font-size: 0.8rem;
+  color: #888;
+}
+
+.clock-analog {
+  width: 100%;
+  max-width: 160px;
+  aspect-ratio: 1;
+}
+
+.clock-face {
+  fill: #171920;
+  stroke: #2a2e37;
+  stroke-width: 2;
+}
+
+.clock-tick {
+  stroke: #444;
+  stroke-width: 1.2;
+  stroke-linecap: round;
+}
+
+.clock-hand {
+  stroke-linecap: round;
+}
+
+.clock-hand-hour {
+  stroke: #e6e6e6;
+  stroke-width: 3.5;
+}
+
+.clock-hand-minute {
+  stroke: #e6e6e6;
+  stroke-width: 2.5;
+}
+
+.clock-hand-second {
+  stroke: #7aa2f7;
+  stroke-width: 1;
+}
+
+.clock-center {
+  fill: #7aa2f7;
+}
+
+.clock-dots {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.clock-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  border: none;
+  background: #333;
+  cursor: pointer;
+  padding: 0;
+}
+
+.clock-dot.active {
+  background: #7aa2f7;
+}

@@ -1,11 +1,12 @@
 from app.widgets.base import WidgetPlugin
+from app.widgets.clock import ClockWidget
 from app.widgets.llm_digest import LLMDigestWidget
 from app.widgets.stocks import StocksWidget
 from app.widgets.todo_sync import TodoSyncWidget
 
 REGISTRY: dict[str, WidgetPlugin] = {
     plugin.type_key: plugin
-    for plugin in (TodoSyncWidget(), StocksWidget(), LLMDigestWidget())
+    for plugin in (TodoSyncWidget(), StocksWidget(), LLMDigestWidget(), ClockWidget())
 }
 
 
