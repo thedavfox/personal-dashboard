@@ -2,7 +2,7 @@ import { useState } from "react";
 
 interface Props {
   value: string;
-  onSave: (title: string | null) => void;
+  onSave: (title: string) => void;
 }
 
 export function EditableTitle({ value, onSave }: Props) {
@@ -13,7 +13,7 @@ export function EditableTitle({ value, onSave }: Props) {
     setEditing(false);
     const trimmed = draft.trim();
     if (trimmed === value) return;
-    onSave(trimmed === "" ? null : trimmed);
+    onSave(trimmed);
   }
 
   function cancel() {
@@ -41,7 +41,7 @@ export function EditableTitle({ value, onSave }: Props) {
 
   return (
     <span className="widget-title" onClick={() => setEditing(true)} title="Click to rename">
-      {value}
+      {value || <span className="widget-title-placeholder">Untitled</span>}
     </span>
   );
 }
