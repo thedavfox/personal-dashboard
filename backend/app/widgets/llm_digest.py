@@ -60,10 +60,10 @@ async def _call_groq(client: httpx.AsyncClient, messages: list[dict]) -> list[di
         GROQ_URL,
         headers={"Authorization": f"Bearer {settings.groq_api_key}"},
         json={
-            "model": "llama-3.3-70b-versatile",
+            "model": "openai/gpt-oss-120b",
             "response_format": {"type": "json_object"},
             "temperature": 0.2,
-            "max_tokens": 1200,
+            "max_tokens": 2000,
             "messages": messages,
         },
     )
